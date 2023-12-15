@@ -16,16 +16,21 @@
   <meta name="author" content="Hanyang Ding">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="Make-An-AudioIntroduction文章指出由于Text-Audio pair数据的匮乏及音频数据的复杂性（每秒16kHz的采样率下，有16000个数据点），导致在多模态生成任务重，文本到音效的合成进展有效。随后在文章中提出针对这两个问题的解决方法：  Pseudo Prompt Enhancement: Distill-then-Reprogram Spectrogram auto">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Make-An-Audio: Text-To-Audio Generation with Prompt-Enhanced Diffusion Models">
 <meta property="og:url" content="https://dinghanyang.github.io/dhy_blog/2023/12/10/Make-An-Audio-Text-To-Audio-Generation-with-Prompt-Enhanced-Diffusion-Models/index.html">
 <meta property="og:site_name" content="蜜蜂和鱼">
+<meta property="og:description" content="Make-An-AudioIntroduction文章指出由于Text-Audio pair数据的匮乏及音频数据的复杂性（每秒16kHz的采样率下，有16000个数据点），导致在多模态生成任务重，文本到音效的合成进展有效。随后在文章中提出针对这两个问题的解决方法：  Pseudo Prompt Enhancement: Distill-then-Reprogram Spectrogram auto">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://dinghanyang.github.io/.%5CMake-An-Audio-Text-To-Audio-Generation-with-Prompt-Enhanced-Diffusion-Models.assets%5Cimage-20231215011901118.png">
+<meta property="og:image" content="https://dinghanyang.github.io/.%5CMake-An-Audio-Text-To-Audio-Generation-with-Prompt-Enhanced-Diffusion-Models.assets%5Cimage-20231215011005727.png">
 <meta property="article:published_time" content="2023-12-10T13:41:29.000Z">
-<meta property="article:modified_time" content="2023-12-10T13:53:05.315Z">
+<meta property="article:modified_time" content="2023-12-15T00:40:20.463Z">
 <meta property="article:author" content="Hanyang Ding">
 <meta property="article:tag" content="Notes">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://dinghanyang.github.io/.%5CMake-An-Audio-Text-To-Audio-Generation-with-Prompt-Enhanced-Diffusion-Models.assets%5Cimage-20231215011901118.png">
   
   
   
@@ -207,7 +212,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          0 字
+          166 字
         
       </span>
     
@@ -219,7 +224,7 @@
         
         
           <!-- compatible with older versions-->
-          1 分钟
+          2 分钟
         
       </span>
     
@@ -261,7 +266,31 @@
             
               <div class="markdown-body">
                 
-                
+                <h2 id="Make-An-Audio"><a href="#Make-An-Audio" class="headerlink" title="Make-An-Audio"></a>Make-An-Audio</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>文章指出由于Text-Audio pair数据的匮乏及音频数据的复杂性（每秒16kHz的采样率下，有16000个数据点），导致在多模态生成任务重，文本到音效的合成进展有效。随后在文章中提出针对这两个问题的解决方法：</p>
+<ol>
+<li>Pseudo Prompt Enhancement: Distill-then-Reprogram</li>
+<li>Spectrogram autoencoder</li>
+</ol>
+<p>随后将text-to-audio推广到任意模态到音频</p>
+<h3 id="Pseudo-Prompt-Enhancement-Distill-then-Reprogram"><a href="#Pseudo-Prompt-Enhancement-Distill-then-Reprogram" class="headerlink" title="Pseudo Prompt Enhancement: Distill-then-Reprogram"></a>Pseudo Prompt Enhancement: Distill-then-Reprogram</h3><p><img src="/.%5CMake-An-Audio-Text-To-Audio-Generation-with-Prompt-Enhanced-Diffusion-Models.assets%5Cimage-20231215011901118.png" srcset="/img/loading.gif" lazyload alt="image-20231215011901118"></p>
+<ul>
+<li><p>Expert 1:<a target="_blank" rel="noopener" href="https://dcase.community/documents/workshop2020/proceedings/DCASE2020Workshop_Xu_83.pdf"> A CRNN-GRU BASED REINFORCEMENT LEARNING APPROACH TO AUDIO CAPTIONING</a></p>
+<p>给音频加字幕的</p>
+</li>
+<li><p>Expert 2: <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2209.14275.pdf">AUDIO RETRIEVAL WITH WAVTEXT5K AND CLAP TRAINING</a></p>
+<p>跨模态检索的</p>
+</li>
+<li><p>评委：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2206.04769.pdf">CLAP:clap: : LEARNING AUDIO CONCEPTS FROM NATURAL LANGUAGE SUPERVISION</a></p>
+</li>
+</ul>
+<p>专家1给无标记音频打上标签，专家2通过生成的标签再到数据库里去找无标记的音频，这样就生成了两对结果</p>
+<ul>
+<li>真实音频 与 预测label</li>
+<li>真是label 与 预测音频</li>
+</ul>
+<p>评委选择</p>
+<h3 id="A-high-level-overview-of-Make-An-Audio"><a href="#A-high-level-overview-of-Make-An-Audio" class="headerlink" title="A high-level overview of Make-An-Audio"></a>A high-level overview of Make-An-Audio</h3><p><img src="/.%5CMake-An-Audio-Text-To-Audio-Generation-with-Prompt-Enhanced-Diffusion-Models.assets%5Cimage-20231215011005727.png" srcset="/img/loading.gif" lazyload alt="image-20231215011005727"></p>
+
                 
               </div>
             
