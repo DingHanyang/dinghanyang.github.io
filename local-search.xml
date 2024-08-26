@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+  
+  <entry>
+    <title>Towards Deconfounded Image-Text Matching with Causal Inference</title>
+    <link href="/2024/01/29/Towards-Deconfounded-Image-Text-Matching-with-Causal-Inference/"/>
+    <url>/2024/01/29/Towards-Deconfounded-Image-Text-Matching-with-Causal-Inference/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Make-An-Audio: Text-To-Audio Generation with Prompt-Enhanced Diffusion Models</title>
+    <link href="/2023/12/10/Make-An-Audio-Text-To-Audio-Generation-with-Prompt-Enhanced-Diffusion-Models/"/>
+    <url>/2023/12/10/Make-An-Audio-Text-To-Audio-Generation-with-Prompt-Enhanced-Diffusion-Models/</url>
+    
+    <content type="html"><![CDATA[<h2 id="Make-An-Audio"><a href="#Make-An-Audio" class="headerlink" title="Make-An-Audio"></a>Make-An-Audio</h2><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>文章指出由于Text-Audio pair数据的匮乏及音频数据的复杂性（每秒16kHz的采样率下，有16000个数据点），导致在多模态生成任务重，文本到音效的合成进展有效。随后在文章中提出针对这两个问题的解决方法：</p><ol><li>Pseudo Prompt Enhancement: Distill-then-Reprogram</li><li>Spectrogram autoencoder</li></ol><p>随后将text-to-audio推广到任意模态到音频</p><h3 id="Pseudo-Prompt-Enhancement-Distill-then-Reprogram"><a href="#Pseudo-Prompt-Enhancement-Distill-then-Reprogram" class="headerlink" title="Pseudo Prompt Enhancement: Distill-then-Reprogram"></a>Pseudo Prompt Enhancement: Distill-then-Reprogram</h3><p><img src="/../img/Make-An-Audio-Text-To-Audio-Generation-with-Prompt-Enhanced-Diffusion-Models.assets/image-20231215011901118.png" alt="image-20231215011901118"></p><ul><li><p>Expert 1:<a href="https://dcase.community/documents/workshop2020/proceedings/DCASE2020Workshop_Xu_83.pdf"> A CRNN-GRU BASED REINFORCEMENT LEARNING APPROACH TO AUDIO CAPTIONING</a></p><p>给音频加字幕的</p></li><li><p>Expert 2: <a href="https://arxiv.org/pdf/2209.14275.pdf">AUDIO RETRIEVAL WITH WAVTEXT5K AND CLAP TRAINING</a></p><p>跨模态检索的</p></li><li><p>评委：<a href="https://arxiv.org/pdf/2206.04769.pdf">CLAP:clap: : LEARNING AUDIO CONCEPTS FROM NATURAL LANGUAGE SUPERVISION</a></p></li></ul><p>专家1给无标记音频打上标签，专家2通过生成的标签再到数据库里去找无标记的音频，这样就生成了两对结果</p><ul><li>真实音频 与 预测label</li><li>真是label 与 预测音频</li></ul><h3 id="评委选择"><a href="#评委选择" class="headerlink" title="评委选择"></a>评委选择</h3><p>选择CLAP分高的那个audio-text pair<br>CLAP可以同时做Audio-captioning和text-audio retrieval<br>**Tips:**这里这样做最重要的原因是作者希望能够这个text能够是自然语言，比如 先听见雨声再听见人声，通过这种数据增强的方式可以合成这两个具有先后时间关系的声音。</p><h3 id="Dynamic-Reprogramming（特殊的数据构造方式）"><a href="#Dynamic-Reprogramming（特殊的数据构造方式）" class="headerlink" title="Dynamic Reprogramming（特殊的数据构造方式）"></a>Dynamic Reprogramming（特殊的数据构造方式）</h3><p>For verb (denoted as v), we have {‘hearing’, ‘noticing’, ‘listening to’, ‘appearing’}; for adjective (denoted as a), we have {‘clear’, ‘noisy’, ‘close-up’, ‘weird’, ‘clean’}; for noun (denoted as n), we have {‘audio’, ‘sound’, ‘voice’}; for numeral&#x2F;quantifier (denoted as q), we have {‘a’, ‘the’, ‘some’};</p><ul><li>before v q a n of &amp;, X</li><li>X after v q a n of &amp;</li><li>etc.</li></ul><p>通过把前面专家模型标注的数据随机填充到模版中形成新的数据</p><p><strong>Tips:</strong><br>T2A任务和TTS任务不同的是，T2A任务中文本和音频不具有时间相关性，用这个方法主要是为了构造出丰富的包含<strong>时间先后顺序</strong>的音频描述。</p><h3 id="A-high-level-overview-of-Make-An-Audio"><a href="#A-high-level-overview-of-Make-An-Audio" class="headerlink" title="A high-level overview of Make-An-Audio"></a>A high-level overview of Make-An-Audio</h3><p><img src="/../img/Make-An-Audio-Text-To-Audio-Generation-with-Prompt-Enhanced-Diffusion-Models.assets/image-20231215011005727.png" alt="image-20231215011005727"></p><h3 id="Textual-Representation"><a href="#Textual-Representation" class="headerlink" title="Textual Representation"></a>Textual Representation</h3><p>文本表征部分作者尝试使用CLAP和T5(LLM)进行实验，结果发现能得到差不多的性能。</p><ul><li>CLAP: 通过文本和图片训练得到联合表征</li><li>LLM: 纯文本训练</li></ul><p><strong>Tips:</strong><br>由于CLAP无论是模型大小还是效率上都优于LLM，作者选择了使用CLAP。这里虽然作者没写，但是原因是因为任务中进行文本表征的数据被限定在一个狭小的空间中。并且CLAP作为前面专家标注模型的评委，有点自导自演的感觉了。</p><h3 id="Audio-Representation"><a href="#Audio-Representation" class="headerlink" title="Audio Representation"></a>Audio Representation</h3><p><a href="https://github.com/YuanGongND/ssast">SSAST: Self-Supervised Audio Spectrogram Transformer</a><br>没做改变 照搬结构<br>Tips: 把音频转化成频谱图再做表征的原因</p><ol><li>频谱图从人类视觉方面更加直观且去除了相位属性</li><li>之前的任务已经证明了text-to-image的成功，所以尝试用文字通过生成频谱图</li></ol><p>跟图像比较大的区别就是不具有旋转不变性，所以空间比图像来说小一些</p><h3 id="Generative-Latent-Diffusion"><a href="#Generative-Latent-Diffusion" class="headerlink" title="Generative Latent Diffusion"></a>Generative Latent Diffusion</h3><p>Diffusion<br>GAN: weak conditional 质量可以保证 主要是多样性<br>Latent diffusion:</p><p><img src="/../img/Make-An-Audio-Text-To-Audio-Generation-with-Prompt-Enhanced-Diffusion-Models.assets/image-20231215121409223.png" alt="image-20231215121409223"></p><p>这张图解释为什么在latent space上而不是pixel上做diffusion<br>传统的模型浪费了一些算力和容量在人类不可感知的细节，比如像素级别的差异是区别和不敏感的。在可感知的区域用diffusion，细节上用GAN去做强conditional的任务。<br>这篇文章是在频谱图上面做的，可以类比图像。</p><p>U-Net: 作为diffusion去噪器<br>通过文本嵌入为条件，使用U-Net经过扩散过程</p><p>任务中的训练损失和DDPM相同，即使U-Net的预测噪声与采样的随机噪声的均方差损失</p><h2 id="X-To-Audio-No-Modality-Left-Behind"><a href="#X-To-Audio-No-Modality-Left-Behind" class="headerlink" title="X-To-Audio: No Modality Left Behind"></a>X-To-Audio: No Modality Left Behind</h2><ol><li><p>Personalized Text-To-Audio Generation</p><p>思想来源于 stochastic differential editing 随机差分编辑</p><p>个性化的音频编辑，比如有一个鸟叫声的音频，想在鸟叫的背景中加入风声，先设定一个时间步$t_0$,总去噪步骤为$N$,然后原始数据中为$t_0 \times N$加入噪声，然后去噪。</p></li><li><p>Audio Inpainting</p><p>思想来源于图像修复工作LaMa</p><p>然后基于Wav2vec2.0 做了一个基于时间域遮盖的模型</p><p><img src="/../img/Make-An-Audio-Text-To-Audio-Generation-with-Prompt-Enhanced-Diffusion-Models.assets/image-20231215125757154.png" alt="image-20231215125757154"></p></li><li><p>Visual(Image&#x2F;Video)-to-Audio</p><p><img src="/../img/Make-An-Audio-Text-To-Audio-Generation-with-Prompt-Enhanced-Diffusion-Models.assets/image-20231215125953662.png" alt="image-20231215125953662"><br>这里用的是CLIP, CLIP是一个将文本和图像映射到同一个隐空间的模型，直接用CLIP输出的图像表征去代替Text Encoder</p><p>视频的话是平均抽4个帧，然后做时间维度的池化，这里有比较大的问题，比如抽不出关键帧</p></li></ol><h2 id="Make-an-audio2"><a href="#Make-an-audio2" class="headerlink" title="Make-an-audio2"></a>Make-an-audio2</h2><p><img src="/../img/Make-An-Audio-Text-To-Audio-Generation-with-Prompt-Enhanced-Diffusion-Models.assets/image-20231215133813441.png" alt="image-20231215133813441"></p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>Notes</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>How to Read a Paper</title>
+    <link href="/2023/12/08/How-to-Read-a-Paper/"/>
+    <url>/2023/12/08/How-to-Read-a-Paper/</url>
+    
+    <content type="html"><![CDATA[<h2 id="How-to-Read-a-Paper"><a href="#How-to-Read-a-Paper" class="headerlink" title="How to Read a Paper"></a>How to Read a Paper</h2><p><a href="https://web.stanford.edu/class/ee384m/Handouts/HowtoReadPaper.pdf"><em>How to Read a Paper</em></a> 是<em>S. Keshav</em>教授写的一篇如何通过三步法来进行论文阅读的指南。K教授认为很多研究生和学者都缺乏学习如何高效阅读论文的方法，所以他将在这篇文章中介绍如何应用<em>Three-pass</em> 方法去高效阅读论文或者写一篇综述。</p><h3 id="The-first-pass"><a href="#The-first-pass" class="headerlink" title="The first pass"></a>The first pass</h3><p>进行10到15分钟的快读，包括</p><ol><li>仔细阅读标题、摘要、介绍</li><li>阅读section和sub-section headings，但忽略内容</li><li>阅读结论</li><li>瞥一眼引用列表，看看是否有那些文章是阅读过的</li></ol><p>当快读进行完后可以选择性的回答以下几个问题：</p><ol><li>这篇论文是什么类型的</li><li>有其他论文和它相关吗，有那些基础理论是解决这个问题的</li><li>论文的假设是否有效</li><li>这篇论文的主要贡献是什么</li><li>这篇论文写作得好吗</li></ol><p>经过这个阶段实际上是像通过快速的浏览来辨别这篇文章是否值得深入读，或者先标记一下，以后的研究是否会用上。另外，K教授提示，当你在写一篇论文的时候，你可以通过<em>First pass</em>中的流程去审阅你的文章是否可以表达清晰，是否可以引起读者和审稿人的兴趣。</p><h3 id="The-second-pass"><a href="#The-second-pass" class="headerlink" title="The second pass"></a>The second pass</h3><p>第二部分需要你更仔细的去读文章，但是可以跳过那些证明的内容，抓住重点，这部分可以会耗时1小时左右：</p><ol><li>仔细阅读图表，特别是图表的坐标轴、标记是否合理，这可以帮助我们区分这篇文章是否真的优秀。</li><li>记得去标记一下引用中没有阅读过的文章，在未来通过阅读这些文章可以更好的在该领域展开研究。</li></ol><p>K教授提出在经过这一部分的阅读后，应该可以总结文章的主要内容，并且大致知道通过什么方法证明。但是在这个部分也会遇到一部分问题，可能是基础知识不够、论文写作风格造成了一些迷惑，亦或是需要有很多前置知识。当遇到困难时有三个选择：</p><ol><li>放弃</li><li>暂时搁置，先学习前置知识</li><li>坚持进入第三部分</li></ol><h3 id="The-third-pass"><a href="#The-third-pass" class="headerlink" title="The third pass"></a>The third pass</h3><p>为了完全去理解Paper所传达的意图，你需要完全的<em>re-implement</em>这篇文章，做和作者一样的假设，用一样的方法做出一样的结果并比较。通过这个过程，也许会发现隐藏的一些错误或者人为的假设。</p><p>初学者完成这一部分可能需要4-5小时甚至更长的时间，但是如果能完成的话，对整个文章的理解、实验的细节、可能存在的问题以及对于未来的工作都很有帮助。</p><h3 id="Doing-a-literature-survey"><a href="#Doing-a-literature-survey" class="headerlink" title="Doing a literature survey"></a>Doing a literature survey</h3><p>K教授同时也简单的介绍了下如何写文献综述：</p><ol><li>通过搜索引擎找一些研究领域最新文章，如果能找到一篇综述的话，那可以基于综述进行接下来的任务</li><li>标记这个领域中频繁出现的名字，他们大概率是该领域专家，去寻找他们的个人网站，查看他们近期的文章</li><li>通过这些专家的文章确定你所研究方向的顶会名称，从而找到更多的论文进行阅读</li></ol><p>这篇文章是K教授15年以来的阅读论文和了解未知领域的简单方法论，可以从中学习模式并尝试应用。</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>Notes</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  
+</search>
