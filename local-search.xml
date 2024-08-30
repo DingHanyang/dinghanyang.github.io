@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>[思考]-李沐讲座：大语言模型的实践经验和未来预测</title>
+    <link href="/2024/08/30/LLM-speech-from-Mu-Li/"/>
+    <url>/2024/08/30/LLM-speech-from-Mu-Li/</url>
+    
+    <content type="html"><![CDATA[<h2 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h2><ul><li>带宽的重要性高，机房、机架、芯片的密集程度、摆放的位置会产生延迟，延迟会对计算速度产生很大的影响。</li><li>内存的大小目前受到工艺和技术的限制，未来比较长的一段时间可能会在200GB以内，也就是说其实模型大小在未来一段时间中会被控制在一定的范围内，而不是由于算力的限制导致模型大小无法扩展。</li><li>算力</li><li>供电，李沐老师提到曾经花几个月去调研发现，自己造一个电厂的成本比用电还低。</li><li>硬件的价格，长期来看算力会越来越便宜，在自由竞争的市场中，算力翻倍的情况下，算力的价格应该维持不变。</li></ul><h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p><img src="/./LLM-speech-from-Mu-Li/image-20240830220159597.png" alt="image-20240830220159597"></p><ul><li><p>Token的数量级不会有显著提升</p></li><li><p>模型大小在100-500B</p></li><li><p>音乐的生成</p></li><li><p>语言交互的延迟降低了</p></li><li><p>图片逐渐的有”灵魂”，缺少了一下情绪的表达</p></li><li><p>视频的生成，视频的数据处理的成本很可能高于视频生成模型生成的一个成本</p></li><li><p>多模态能借用文本模型的泛化能力去支持其他模态，自然语言交互可能是未来的一个常态。能用清晰，有条理的语言去组织和表达自己想做的事情是一个很重要的能力。</p></li><li><p>Killer app概念，短视频是最近的一个Killer app</p></li><li><table><thead><tr><th align="center"></th><th align="center">简单任务</th><th align="center">复杂任务</th></tr></thead><tbody><tr><td align="center">文科白领</td><td align="center">✅</td><td align="center">🏗️</td></tr><tr><td align="center">理科白领</td><td align="center">🏗️</td><td align="center">Moonshot</td></tr><tr><td align="center">蓝领</td><td align="center">Moonshot</td><td align="center">Moonshot</td></tr></tbody></table><p>目前的进展来看，很难解决蓝领的问题，而蓝领是这个世界上最主要的成员</p></li></ul><h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><ul><li>预训练是一个工程问题</li><li>后训练中，高质量的数据和算法很重要</li><li>垂直模型可能是个伪命题，没有一个真正的垂直模型，垂直模型的通用能力也是很强的。</li><li>模型的评估是重要的一个部分，自然语言有一定的二义性，模型评估会带来bias问题。</li><li>算法决定模型下限，数据决定模型上限。</li></ul><p><img src="/./LLM-speech-from-Mu-Li/image-20240830225809655.png" alt="image-20240830225809655"></p><ul><li>自建服务器的价格其实和使用云服务器差不多</li></ul>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>演讲</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>面试复习之计算机网络篇</title>
     <link href="/2024/08/26/Network-notebook-for-interview/"/>
     <url>/2024/08/26/Network-notebook-for-interview/</url>
